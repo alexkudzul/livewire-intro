@@ -11,6 +11,10 @@ class ShowPosts extends Component
     public $sort = 'id';
     public $direction = 'desc';
 
+    // Escucha el evento 'render emitido desde CreatePost.php y ejecuta la función 'render' de ShowPosts.php
+    // protected $listeners = ['render' => 'render']; // ['evento-que-escucha'=>'función-que-ejecuta']
+    protected $listeners = ['render']; // Si el nombre del evento y el método al que está llamando coinciden, puede omitir la clave.
+
     public function render()
     {
         $posts = Post::where('title', 'LIKE', '%' . $this->search . '%')
