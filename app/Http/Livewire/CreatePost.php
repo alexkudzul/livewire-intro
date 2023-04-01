@@ -11,13 +11,32 @@ class CreatePost extends Component
     public $title;
     public $content;
 
+    protected $rules = [
+        'title' => 'required|max:10',
+        'content' => 'required|min:100',
+    ];
+
     public function render()
     {
         return view('livewire.create-post');
     }
 
+    /**
+     * Validación en tiempo real
+     *
+     * Se utiliza la función updated que recibe como parametro la propiedad y
+     * ejecuta validateOnly para validar solo dicha propiedad para esto se debe
+     * de permitir que la propiedad se actualize en tiempo real (sin defers).
+     */
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
     public function save()
     {
+        $this->validate();
+
         Post::create([
             'title' => $this->title,
             'content' => $this->content,

@@ -11,12 +11,14 @@
         <x-slot name="content">
             <div class="mb-4">
                 <x-label value="Título del Post" />
-                <x-input class="w-full" type="text" wire:model.defer="title" />
+                <x-input class="w-full" type="text" wire:model="title" />
+                <x-input-error for="title" />
             </div>
 
             <div class="mb-4">
                 <x-label value="Contenido del Post" />
                 <textarea class="form-control w-full" rows="6" wire:model.defer="content"></textarea>
+                <x-input-error for="content" />
             </div>
         </x-slot>
 
