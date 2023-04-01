@@ -7,8 +7,9 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <x-table>
-            <div class="px-6 py-4">
-                <x-input class="w-full" placeholder="Escriba lo que quiera buscar" type="text" wire:model="search" />
+            <div class="px-6 py-4 flex items-center">
+                <x-input class="flex-1 mr-4" placeholder="Escriba lo que quiera buscar" type="text" wire:model="search" />
+                @livewire('create-post')
             </div>
 
             @if (count($posts))
