@@ -12,8 +12,8 @@ class CreatePost extends Component
     public $content;
 
     protected $rules = [
-        'title' => 'required|max:10',
-        'content' => 'required|min:100',
+        'title' => 'required',
+        'content' => 'required',
     ];
 
     public function render()
@@ -28,10 +28,10 @@ class CreatePost extends Component
      * ejecuta validateOnly para validar solo dicha propiedad para esto se debe
      * de permitir que la propiedad se actualize en tiempo real (sin defers).
      */
-    public function updated($propertyName)
-    {
-        $this->validateOnly($propertyName);
-    }
+    // public function updated($propertyName)
+    // {
+    //     $this->validateOnly($propertyName);
+    // }
 
     public function save()
     {
