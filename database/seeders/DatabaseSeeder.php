@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +20,8 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
+        Storage::deleteDirectory('posts'); // Elimina la carpeta posts al momento de ejecutar el seeder de nuevo (evita duplicar imagenes).
+        Storage::makeDirectory('posts'); // Crea una carpeta posts
         \App\Models\Post::factory(100)->create();
     }
 }

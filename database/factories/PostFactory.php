@@ -19,6 +19,9 @@ class PostFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
             'content' => $this->faker->text(),
+            // true => se creara una ruta similar a este: public/storage/posts/image1.
+            // false => almacena solo el nombre de la imagen.
+            'image' => 'posts/' . $this->faker->image('public/storage/posts', 640, 480, null, false), // posts/image1
         ];
     }
 }
