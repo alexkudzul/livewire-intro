@@ -13,13 +13,14 @@ class ShowPosts extends Component
     use WithFileUploads;
     use WithPagination;
 
-    public $search;
+    public $search = '';
     public $sort = 'id';
     public $direction = 'desc';
     public $open_edit = false; // open a modal
     public $post;
     public $image;
     public $identifier;
+    public $cant = '10';
 
     // Escucha el evento 'render emitido desde CreatePost.php y ejecuta la función 'render' de ShowPosts.php
     // protected $listeners = ['render' => 'render']; // ['evento-que-escucha'=>'función-que-ejecuta']
@@ -28,6 +29,15 @@ class ShowPosts extends Component
     protected $rules = [
         'post.title' => 'required',
         'post.content' => 'required'
+    ];
+
+    // Se le llama queryString al hecho de enviar parámetros a traves de la url de la página
+    // Mantener una cadena de consulta limpia utilizando ‘except’
+    protected $queryString = [
+        'sort' => ['except' => 'id'],
+        'direction' => ['except' => 'desc'],
+        'search' => ['except' => ''],
+        'cant' => ['except' => '10'],
     ];
 
     public function mount()
@@ -49,7 +59,7 @@ class ShowPosts extends Component
         $posts = Post::where('title', 'LIKE', '%' . $this->search . '%')
             ->orWhere('content', 'LIKE', '%' . $this->search . '%')
             ->orderBy($this->sort, $this->direction)
-            ->paginate(10);
+            ->paginate($this->cant);
 
         // Por defecto se utiliza el layout app.blade.php
         return view('livewire.show-posts', compact('posts'));
