@@ -8,7 +8,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <x-table>
             <div class="px-6 py-4 flex items-center">
-                <x-input class="flex-1 mr-4" placeholder="Escriba lo que quiera buscar" type="text" wire:model="search" />
+                <x-input class="flex-1 mr-4" placeholder="Escriba lo que quiera buscar" type="text"
+                    wire:model="search" />
                 @livewire('create-post')
             </div>
 
@@ -67,25 +68,25 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($posts as $item)
+                        @foreach ($posts as $post)
                             <tr>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">
-                                        {{ $item->id }}
+                                        {{ $post->id }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">
-                                        {{ $item->title }}
+                                        {{ $post->title }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">
-                                        {{ $item->content }}
+                                        {{ $post->content }}
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-right text-sm font-medium">
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                <td class="px-6 py-4 text-sm font-medium">
+                                    @livewire('edit-post', ['post' => $post], key($post->id))
                                 </td>
                             </tr>
                         @endforeach
