@@ -68,25 +68,28 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach ($posts as $post)
+                        @foreach ($posts as $item)
                             <tr>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">
-                                        {{ $post->id }}
+                                        {{ $item->id }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">
-                                        {{ $post->title }}
+                                        {{ $item->title }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="text-sm text-gray-900">
-                                        {{ $post->content }}
+                                        {{ $item->content }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 text-sm font-medium">
-                                    @livewire('edit-post', ['post' => $post], key($post->id))
+                                    {{-- @livewire('edit-post', ['post' => $item], key($item->id)) --}}
+                                    <a class="btn btn-green" wire:click="edit({{ $item }})">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -99,5 +102,51 @@
             @endif
         </x-table>
     </div>
+
+    <x-dialog-modal wire:model="open_edit">
+        <x-slot name=title>
+            Editar el post
+        </x-slot>
+
+        <x-slot name=content>
+            {{-- wire:loading -> oculta la alerta y solo se va a mostrar cuando se procese una image --}}
+            <div wire:loading wire:target="image"
+                class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">¡Imagen cargando!</strong>
+                <span class="block sm:inline">Espere un momento hasta que la imagen se haya procesado</span>
+            </div>
+
+            @if ($image)
+                <img class="mb-4" src="{{ $image->temporaryUrl() }}" alt="">
+            @else
+                <img src="{{ Storage::url($post->image) }}" alt="">
+            @endif
+
+            <div class="mb-4">
+                <x-label value="Titulo del post" />
+                <x-input wire:model="post.title" type="text" class="w-full" />
+            </div>
+
+            <div>
+                <x-label value="Contenido del post" />
+                <textarea wire:model="post.content" rows="6" class="form-control w-full"></textarea>
+            </div>
+
+            <div>
+                <input type="file" wire:model="image" id="{{ $identifier }}">
+                <x-input-error for="image" />
+            </div>
+        </x-slot>
+
+        <x-slot name=footer>
+            <x-secondary-button wire:click="$set('open_edit',false)" class="mr-3">
+                Cancelar
+            </x-secondary-button>
+
+            <x-danger-button wire:click="update" wire:loading.attr="disabled" class="disabled:opacity-25">
+                Actualizar
+            </x-danger-button>
+        </x-slot>
+    </x-dialog-modal>
 
 </div>
