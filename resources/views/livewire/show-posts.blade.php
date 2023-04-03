@@ -100,6 +100,13 @@
                     No existe ningún registro coincidente
                 </div>
             @endif
+
+            {{-- Pagination --}}
+            @if ($posts->hasPages(2))
+                <div class="px-6 py-3">
+                    {{ $posts->links() }}
+                </div>
+            @endif
         </x-table>
     </div>
 
