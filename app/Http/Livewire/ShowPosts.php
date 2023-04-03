@@ -37,6 +37,13 @@ class ShowPosts extends Component
         $this->identifier = rand();
     }
 
+    // Se ejecuta después de que una propiedad cambie
+    public function updatingSearch()
+    {
+        // Resetea la página cuando la propiedad search cambie
+        $this->resetPage();
+    }
+
     public function render()
     {
         $posts = Post::where('title', 'LIKE', '%' . $this->search . '%')
