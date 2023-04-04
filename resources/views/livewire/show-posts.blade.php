@@ -1,4 +1,6 @@
-<div>
+{{-- loadPosts acción se ejecutará inmediatamente después de que el componente Livewire se represente en la página. --}}
+{{-- loadPosts se ejecuta y cambia a true su valor una vez que la carga de toda la página haya terminado. --}}
+<div wire:init="loadPosts">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
@@ -107,18 +109,19 @@
                         @endforeach
                     </tbody>
                 </table>
+
+                {{-- Pagination --}}
+                @if ($posts->hasPages())
+                    <div class="px-6 py-3">
+                        {{ $posts->links() }}
+                    </div>
+                @endif
             @else
                 <div class="px-6 py-4">
                     No existe ningún registro coincidente
                 </div>
             @endif
 
-            {{-- Pagination --}}
-            @if ($posts->hasPages(2))
-                <div class="px-6 py-3">
-                    {{ $posts->links() }}
-                </div>
-            @endif
         </x-table>
     </div>
 

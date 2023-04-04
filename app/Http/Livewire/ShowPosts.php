@@ -21,6 +21,7 @@ class ShowPosts extends Component
     public $image;
     public $identifier;
     public $cant = '10';
+    public $readyToLoad = false;
 
     // Escucha el evento 'render emitido desde CreatePost.php y ejecuta la función 'render' de ShowPosts.php
     // protected $listeners = ['render' => 'render']; // ['evento-que-escucha'=>'función-que-ejecuta']
@@ -56,13 +57,27 @@ class ShowPosts extends Component
 
     public function render()
     {
-        $posts = Post::where('title', 'LIKE', '%' . $this->search . '%')
-            ->orWhere('content', 'LIKE', '%' . $this->search . '%')
-            ->orderBy($this->sort, $this->direction)
-            ->paginate($this->cant);
+        // Si es true se muestra los datos de la tabla
+        if ($this->readyToLoad) {
+            $posts = Post::where('title', 'like', '%' . $this->search . '%')
+                ->orWhere('content', 'like', '%' . $this->search . '%')
+                ->orderBy($this->sort, $this->direction)
+                ->paginate($this->cant);
+        } else {
+            // De lo contrario se muestra vacío
+            // Tip: usar un spinner que indique la carga
+            $posts = [];
+        }
 
         // Por defecto se utiliza el layout app.blade.php
         return view('livewire.show-posts', compact('posts'));
+    }
+
+    // loadPosts acción se ejecutará inmediatamente después de que el componente Livewire se represente en la página.
+    // Cambia a true una vez que la carga de toda la página haya terminado por medio de wire:init
+    public function loadPosts()
+    {
+        $this->readyToLoad = true;
     }
 
     public function order($sort)
