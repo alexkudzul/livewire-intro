@@ -99,10 +99,14 @@
                                         {{ $item->content }}
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 text-sm font-medium">
+                                <td class="px-6 py-4 text-sm font-medium flex">
                                     {{-- @livewire('edit-post', ['post' => $item], key($item->id)) --}}
                                     <a class="btn btn-green" wire:click="edit({{ $item }})">
                                         <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <a class="btn btn-red ml-2" wire:click="$emit('deletePost', {{ $item->id }})">
+                                        <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -170,5 +174,34 @@
             </x-danger-button>
         </x-slot>
     </x-dialog-modal>
+
+    @push('js')
+        <script src="sweetalert2.all.min.js"></script>
+        <script>
+            // Se ejecutara el evento solo cuando se haga click al boton delete
+            Livewire.on('deletePost', postId => {
+                Swal.fire({
+                    title: '¿Esta seguro?',
+                    text: "No podra revertir esta acción",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Eliminar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Emitir evento desde javascript
+                        // El componente 'show-posts' escuchara el evento 'delete'
+                        Livewire.emitTo('show-posts', 'delete', postId);
+                        Swal.fire(
+                            'Eliminado',
+                            'El Post ha sido eliminado',
+                            'success'
+                        )
+                    }
+                })
+            });
+        </script>
+    @endpush
 
 </div>

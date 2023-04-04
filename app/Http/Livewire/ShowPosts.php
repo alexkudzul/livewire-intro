@@ -24,8 +24,9 @@ class ShowPosts extends Component
     public $readyToLoad = false;
 
     // Escucha el evento 'render emitido desde CreatePost.php y ejecuta la función 'render' de ShowPosts.php
+    // Escucha el evento 'delete' emitido desde show-posts y ejecuta la función 'delete' de ShowPosts.php
     // protected $listeners = ['render' => 'render']; // ['evento-que-escucha'=>'función-que-ejecuta']
-    protected $listeners = ['render']; // Si el nombre del evento y el método al que está llamando coinciden, puede omitir la clave.
+    protected $listeners = ['render', 'delete']; // Si el nombre del evento y el método al que está llamando coinciden, puede omitir la clave.
 
     protected $rules = [
         'post.title' => 'required',
@@ -130,5 +131,12 @@ class ShowPosts extends Component
 
         // Activar eventos con emit().
         $this->emit('alert', 'El post se actualizo satisfactoriamente');
+    }
+
+    // Escucha el evento 'delete' emitido desde show-posts y ejecuta la función 'delete' de ShowPosts.php
+    public function delete(Post $post)
+    {
+        $post->delete();
+        Storage::delete($post->image);
     }
 }
