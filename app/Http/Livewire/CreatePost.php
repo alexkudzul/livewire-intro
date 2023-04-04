@@ -75,4 +75,20 @@ class CreatePost extends Component
         $this->emitTo('show-posts', 'render');
         $this->emit('alert', 'El Post se creó satisfactoriamente');
     }
+
+    // Hook 'updatingNameProperty' Se ejecuta antes de que se actualice una propiedad ($open)
+    public function updatingOpen()
+    {
+        if ($this->open == false) {
+            // Reseteamos los valores de las siguientes propiedades.
+            // En este caso solo resetea el campo title, ya que el 'content'
+            // y el 'image' son inmutables por lo que se hara de otra forma.
+            $this->reset(['title', 'content', 'image']);
+            // Con esto logramos "resetear" el campo input de tipo "file" o imagen.
+            $this->identifier = rand();
+            // Emitimos un evento para que lo reciba create-post.blade.php en
+            // el script de CKEditor y con esto reseteamos la propiedad 'content'.
+            $this->emit('resetCKEditor');
+        }
+    }
 }

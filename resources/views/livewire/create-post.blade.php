@@ -25,10 +25,12 @@
                 <x-input-error for="title" />
             </div>
 
-            {{-- wire:ignore - Ignora los cambios de DOM --}}
-            <div class="mb-4" wire:ignore>
+            <div class="mb-4">
                 <x-label value="Contenido del Post" />
-                <textarea id="editor" class="form-control w-full" rows="6" wire:model.defer="content"></textarea>
+                {{-- wire:ignore - Ignora los cambios de DOM --}}
+                <div wire:ignore>
+                    <textarea id="editor" class="form-control w-full" rows="6" wire:model.defer="content"></textarea>
+                </div>
                 <x-input-error for="content" />
             </div>
 
@@ -68,6 +70,12 @@
                         vez que se modifique algo en el editor.getData(),
                         tambien se vea modificado en la propiedad 'content' */
                         @this.set('content', editor.getData()); // Parte de la configuración de livewire
+                    });
+
+                    // Cuando abrimos el modal se ejecuta updatingOpen() de CreatePost.php y recibimos el evento resetCKEditor
+                    Livewire.on('resetCKEditor', () => {
+                        // Limpia el editor.
+                        editor.setData('');
                     });
                 })
                 .catch(error => {
