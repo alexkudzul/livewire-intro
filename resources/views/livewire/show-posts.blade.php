@@ -204,4 +204,6 @@
         </script>
     @endpush
 
+    {{-- Prueba de Comunicación entre Livewire y Alpine, descomentar para ver el ejemplo --}}
+    {{-- @livewire('alpine') --}}
 </div>
