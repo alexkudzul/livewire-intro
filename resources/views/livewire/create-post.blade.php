@@ -25,9 +25,10 @@
                 <x-input-error for="title" />
             </div>
 
-            <div class="mb-4">
+            {{-- wire:ignore - Ignora los cambios de DOM --}}
+            <div class="mb-4" wire:ignore>
                 <x-label value="Contenido del Post" />
-                <textarea class="form-control w-full" rows="6" wire:model.defer="content"></textarea>
+                <textarea id="editor" class="form-control w-full" rows="6" wire:model.defer="content"></textarea>
                 <x-input-error for="content" />
             </div>
 
@@ -49,4 +50,34 @@
             </x-danger-button>
         </x-slot>
     </x-dialog-modal>
+
+    @push('js')
+        <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script>
+
+        <script>
+            ClassicEditor
+                .create(document.querySelector('#editor'))
+                /* Al ignorar el dom en el div del 'editor' con wire:ignore,
+                 perdemos el acceso a la propiedad 'content', por lo que no se
+                 puede guardar lo que se escriba dentro de ella */
+                .then(function(editor) {
+                    /* Eschamos el evento 'change' cada vez que haya un cambio
+                    en el 'data', que se ejecute una acción. */
+                    editor.model.document.on('change:data', () => { // Parte de la configuración de ckeditor
+                        /* Usamos el metodo magico $set() de livewire y cada
+                        vez que se modifique algo en el editor.getData(),
+                        tambien se vea modificado en la propiedad 'content' */
+                        @this.set('content', editor.getData()); // Parte de la configuración de livewire
+                    });
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        </script>
+        {{--
+            - Ver más
+            - https://laravel-livewire.com/docs/2.x/alpine-js#ignoring-dom-changes
+            - https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/editor-lifecycle.html#listening-to-changes
+        --}}
+    @endpush
 </div>

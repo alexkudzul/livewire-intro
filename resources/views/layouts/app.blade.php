@@ -18,6 +18,8 @@
 
     <!-- Styles -->
     @livewireStyles
+
+    @stack('css')
 </head>
 
 <body class="font-sans antialiased">
@@ -44,6 +46,8 @@
     @stack('modals')
 
     @livewireScripts
+
+    @stack('js')
 
     <script>
         // Escucha el evento alert emitido desde CreatePost.php
